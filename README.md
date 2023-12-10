@@ -454,3 +454,5 @@ sc.setup_julia()
 
 and all the subsequent computations will be performed with Julia
 
+# License
+The project is available under GPL-3.0-or-later license. See COPYING.md for more details.

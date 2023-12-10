@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 static auto get_dos=[](auto H, auto sites) {
 	int nexcited = get_int_value("nexcited") ; // number of excited states
 	int isite = get_int_value("dos_site") ; // number of excited states

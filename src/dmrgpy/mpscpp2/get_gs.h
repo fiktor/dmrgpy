@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 // Get the ground state of this Hamiltonian, and write
 // the wavefunction into a file

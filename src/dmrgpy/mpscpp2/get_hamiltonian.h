@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 // return the hamiltonian of the system
 #include"get_field.h" // get local magnetic fields

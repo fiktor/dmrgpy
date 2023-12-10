@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 from . import operatornames
 from . import writemps
 import numpy as np

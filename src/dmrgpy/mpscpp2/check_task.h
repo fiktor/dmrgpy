@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 // check if this task should be performed
 
 static auto check_task = [](auto name){

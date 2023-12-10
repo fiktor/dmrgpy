@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 from sympy import *
 import numbers
 from .. import multioperator as classicMO

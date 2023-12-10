@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 #include"kpmortho.h"  // this is a vestige
 #include"kpmmoments.h" // compute KPM moments
 #include"scalehamiltonian.h" // scale the Hamiltonian

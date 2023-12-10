@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # library for immutable operators,
 # they can act over a wavefunction, but they do not have
 # algebra

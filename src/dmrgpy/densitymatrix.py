@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # routines to compute density matrices
 from . import taskdmrg
 import numpy as np

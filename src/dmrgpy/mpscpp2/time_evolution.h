@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 // perform a time evolution
 
 static auto evoloperator=[](auto H, auto dt) {

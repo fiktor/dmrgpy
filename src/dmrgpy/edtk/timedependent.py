@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 import numpy as np
 from scipy.sparse import linalg as slg
 from scipy.sparse import identity

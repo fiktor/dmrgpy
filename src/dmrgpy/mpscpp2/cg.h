@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 // conjugate gradient method to solve A*x = b for MPS
 
 static auto solveAxb=[](auto A, auto b )

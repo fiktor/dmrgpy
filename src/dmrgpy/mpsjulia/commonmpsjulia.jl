@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 __precompile__()
 push!(LOAD_PATH, @__DIR__) # include this path
 module commonmpsjulia

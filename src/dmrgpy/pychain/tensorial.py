@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 from __future__ import print_function
 from scipy.sparse.linalg import LinearOperator
 from scipy.sparse import coo_matrix,kron

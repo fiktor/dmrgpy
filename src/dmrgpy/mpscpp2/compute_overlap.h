@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 static auto compute_overlap=[]() {
   ofstream myfile;
   auto wf1 = read_wf("overlap_wf1.mps") ; // read first wavefunction 

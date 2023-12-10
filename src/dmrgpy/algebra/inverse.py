@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # methods to solve linear equations, purely written in Python
 # they do not work properly yet
 

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 auto get_mpo(std::string name="MPO.mpo") {
   auto sites = get_sites();
   auto Op = Iden(sites); // get the identity

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 // this does not work yet
 
 auto read_wf(std::string name="psi_GS.mps") {

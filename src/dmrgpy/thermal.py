@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # this library contains routines to perform thermal calculations
 import numpy as np
 

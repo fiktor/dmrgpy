@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 static auto reduced_dm=[]() {
   auto sites = get_sites(); // 
   auto H = get_hamiltonian(sites) ; // get Hamiltonian

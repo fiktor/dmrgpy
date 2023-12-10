@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 using ITensors
 N = 100
 sites = siteinds("S=1",N)

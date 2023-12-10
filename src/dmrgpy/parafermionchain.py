@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 from .manybodychain import Many_Body_Chain
 import numpy as np
 

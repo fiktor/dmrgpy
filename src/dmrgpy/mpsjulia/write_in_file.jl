@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 function write_in_file(name::String,a::Float64,mode="w")
   open(name, mode) do io
           write(io, string(a)) # write energy in a file

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 static auto get_spinful_hopping=[](auto ampo) {
     ifstream jfile; // file to read

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 // read an auto Hamiltonian from file
 
 static auto get_ampo_operator=[](auto ampo,std::string filename) {

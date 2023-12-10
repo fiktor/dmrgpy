@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # kernel polynomial method libraries
 from __future__ import print_function,division
 import scipy.sparse.linalg as lg

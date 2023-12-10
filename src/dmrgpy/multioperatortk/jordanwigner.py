@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 from .. import multioperator
 
 def obj2MO(a): return multioperator.obj2MO([a])

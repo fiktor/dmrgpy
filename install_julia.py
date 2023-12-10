@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+        
+# SPDX-License-Identifier: GPL-3.0-or-later
 import os
 import sys
 import subprocess

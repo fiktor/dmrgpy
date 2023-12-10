@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 // chack that two MPS are the same
 bool same_mps(auto vi, auto vj) {
         // check if the default should be used

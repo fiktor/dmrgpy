@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 function applyoperator()
 	sites = get_sites()
 	nameop = get_string("applyoperator_multioperator")

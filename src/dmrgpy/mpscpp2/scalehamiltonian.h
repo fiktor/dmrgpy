@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 // scale the Hamiltonian so it lies between -1 and 1
 static auto scale_hamiltonian=[](auto sites, auto H) {
 //    auto psi = MPS(sites); // initialize

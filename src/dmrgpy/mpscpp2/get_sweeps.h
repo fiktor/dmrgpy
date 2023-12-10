@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 auto get_sweeps() {
 //    auto input = InputGroup("sweeps.in","sweeps");
 //    auto N = input.getInt("nsweeps",3); // number of sweeps

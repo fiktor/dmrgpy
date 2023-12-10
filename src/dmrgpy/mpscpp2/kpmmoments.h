@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 // compute the KPM moments for matrix m and vectors vi and vj
 static auto moments_vi_vj_full=[](auto m, auto vi, auto vj, int n) {
   // technique use to apply the mpo

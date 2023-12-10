@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from ..algebra import algebra
 from .evolution import discrete_evolution
