@@ -21,7 +21,7 @@ es = np.linspace(-4,4,100)
 ds = [-f(e).imag for e in es]
 dsz = [f(1j*e) for e in es]
 from dmrgpy.analyticcontinuation import imag2real
-es1,ds1 = imag2real(1j*es+1j*1e-1,dsz,x=es+1j*1e-1)
+es1,ds1 = imag2real(1j*es+1j*1e-1,dsz,xs=es+1j*1e-1)
 
 e = sc.gs_energy() # compute the ground state energy
 print("Energy",e)

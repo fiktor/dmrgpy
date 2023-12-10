@@ -24,21 +24,14 @@ wf0 = wf.copy()
 
 # change second value for different times
 
-def get_wf(h, ts, wf_initial=wf0):
-    ts = np.linspace(0.0, 1, 1) 
+def get_wf(h, ts=None, wf_initial=wf0):
+    if ts is None:
+        ts = np.linspace(0.0, 1, 2)[1:]
     from dmrgpy.timeevolution import imaginary_exponential # function to perform t-evol
-    wfs = imaginary_exponential(h,wf_initial,ts=ts) # this computes e^{iht}*wf for each t 
-    wf_final = wfs[1]
-    return wf_final 
+    # this computes e^{iht} @ wf for each t
+    wfs = imaginary_exponential(h,wf_initial,ts=ts) 
+    wf_final = wfs[-1]
+    return wf_final
 
-wf_final = get_wf(h, ts, wf_initial=wf0)
-
-
-
-
-
-
-
-
-
+wf_final = get_wf(h, wf_initial=wf0)
 

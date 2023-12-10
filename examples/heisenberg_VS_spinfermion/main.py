@@ -14,23 +14,15 @@ def geth(sc):
       h = h + sc.Sz[i]*sc.Sz[i+1]
   return h
 
-sc = spinchain.Spin_Chain(spins) # create the spin chain
-fc = spinfermionchain.Spin_Fermion_Hamiltonian(["S" for s in spins]) 
+sc = spinchain.Spin_Chain(spins)
+sc.set_hamiltonian(geth(sc))
+sc_energy0 = sc.gs_energy()
 
-sc.set_hamiltonian(geth(sc)) # create Hamiltonian
-fc.set_hamiltonian(geth(fc)) # create Hamiltonian
+fc = spinfermionchain.Spin_Fermion_Hamiltonian(["S" for s in spins])
+fc.set_hamiltonian(geth(fc))
+fc_energy0 = fc.gs_energy()
+fc_density = fc.get_density()
 
-print("Energy with spins",sc.gs_energy())
-print("Energy with fermions",fc.gs_energy())
-print(fc.get_density())
-
-
-
-
-
-
-
-
-
-
-
+print("Energy with spins", sc_energy0)
+print("Energy with fermions", fc_energy0)
+print("Fermion density", fc_density)

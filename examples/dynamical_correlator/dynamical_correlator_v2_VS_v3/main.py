@@ -26,18 +26,21 @@ j = np.random.randint(n)
 j = i
 t1 = time.time()
 sc = getsc(2)
-(x2,y2) = sc.get_dynamical_correlator(mode="DMRG",i=i,j=j,name="ZZ")
+(x2,y2) = sc.get_dynamical_correlator(
+    mode="DMRG", name=[sc.Sz[i], sc.Sz[j]])
 t2 = time.time()
 print("Time with ITensor2",t2-t1)
 
 
+#%dmrgpy: exclude_from_tests
+# This fails with "Unrecognized itensor_version '3'"
+# because the interface for ITensor3 is not yet implemented.
+
 sc = getsc(3)
-(x3,y3) = sc.get_dynamical_correlator(mode="DMRG",i=i,j=j,name="ZZ")
+(x3,y3) = sc.get_dynamical_correlator(
+    mode="DMRG", name=[sc.Sz[i], sc.Sz[j]])
 t3 = time.time()
 print("Time with ITensor3",t3-t2)
-
-
-
 
 # plot the results
 import matplotlib.pyplot as plt
@@ -53,15 +56,4 @@ plt.xlabel("frequency [J]")
 plt.ylabel("Dynamical correlator")
 plt.xlim([-0.5,4.5])
 plt.show()
-
-
-
-
-
-
-
-
-
-
-
 

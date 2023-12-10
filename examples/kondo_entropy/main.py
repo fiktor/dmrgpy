@@ -25,9 +25,9 @@ def get(JK):
     # Setup the Many Body Hamiltonian
     fc.maxm = 40
     fc.set_hamiltonian(h) # set the hoppings
-    
+
     wf = fc.get_gs()
-    ss = wf.get_correlation_entropy()
+    ss = wf.get_correlation_entropy_density()
     return ss
 
 Js = np.linspace(0.,2.,10) ; sss = [get(J) for J in Js]

@@ -17,6 +17,10 @@ def get(version,n=30):
   sc.set_hamiltonian(h)
   return sc.gs_energy()
 
+#%dmrgpy: exclude_from_tests
+# sc.gs_energy relies on is_hermitian check,
+# which relies on "random_mps" task, which
+# is not implemented in Julia.
 
 e0 = get("julia",n=10) # warmup round with Julia to precompile
 

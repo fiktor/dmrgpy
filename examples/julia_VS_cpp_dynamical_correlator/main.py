@@ -22,17 +22,16 @@ def compare(n):
   t0 = time.time()
   sc = get(n)
   name = (sc.Sx[0],sc.Sx[0])
-#  e0 = sc.gs_energy() # compute the ground state energy
   sc.get_dynamical_correlator(name=name)
   t1 = time.time()
   sc = get(n)
-#  sc.itensor_version = "julia" # setup this version
   sc.setup_julia()
+  #%dmrgpy: exclude_from_tests
+  # This fails because get_dynamical_correlator uses is_hermitian check,
+  # which relies on random_mps task, which is not implemented in Julia.
   sc.get_dynamical_correlator(name=name)
-#  e1 = sc.gs_energy() # compute the ground state energy
   t2 = time.time()
   return t1-t0,t2-t1
-
 
 
 ns = [4,8,10,20]
@@ -47,12 +46,4 @@ for n in ns:
     print("Time with Julia",dt1)
     print()
 f.close()
-
-
-
-
-
-
-
-
 

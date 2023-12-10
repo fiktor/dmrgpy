@@ -4,6 +4,8 @@ import os ; import sys ; sys.path.append(os.getcwd()+'/../../src')
 import numpy as np
 from dmrgpy import spinchain
 
+# This uses `sbatch` which is not available when testing.
+#%dmrgpy: exclude_from_tests
 
 # define the function that you want to parallelize
 # the variables of this function should be internal, i.e.

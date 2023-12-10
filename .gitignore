@@ -15,7 +15,6 @@ __pycache__
 *.a
 mpscpp3
 setup.py
-julia*
 .mpsfolder
 ERROR
 maxenttk

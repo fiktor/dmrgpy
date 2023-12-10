@@ -2,7 +2,7 @@
 import os ; import sys ; sys.path.append(os.getcwd()+'/../../src')
 
 import numpy as np
-import spinchain
+from dmrgpy import spinchain
 import time
 ns = np.array(range(4,30,2))
 es = []
@@ -23,8 +23,7 @@ def compute(n):
   i = 0 ; j=1
   t0 = time.time()
   sc.fit_td = True
-#  (x,y) = sc.evolution(nt=100,dt=0.03,name="ZZ",i=i,j=j)
-  (x2,y2) = sc.get_dynamical_correlator(es=es,use_kpm=False,dt=0.1)
+  (x2,y2) = sc.get_dynamical_correlator(es=es, submode="TD", dt=0.1)
   t1 = time.time()
   print("Time",t1-t0)
   return t1-t0

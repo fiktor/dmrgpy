@@ -2,6 +2,10 @@
 import os ; import sys ; sys.path.append(os.environ["DMRGROOT"])
 import os ; import sys ; sys.path.append(os.environ["PYQULAROOT"])
 
+# Exclude this example from tests because it relies on a different
+# package (pyqula):
+#%dmrgpy: exclude_from_tests
+
 import numpy as np
 from dmrgpy import spinchain
 

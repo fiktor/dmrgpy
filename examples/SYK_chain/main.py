@@ -66,13 +66,3 @@ plt.show()
 exit()
 t2 = time.time()
 print("Time in correlator = ",t2-t1)
-
-
-
-
-
-
-
-
-
-

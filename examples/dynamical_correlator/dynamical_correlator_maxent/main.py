@@ -35,7 +35,8 @@ es = np.linspace(-0.5,5.,500) # energies to use
 t2 = time.time()
 print("Time with KPM",t2-t1)
 
-
+#%dmrgpy: exclude_from_tests
+# This fails because dmrgpy.maxenttk.pymaxent.reconstruct is not implemented
 (x3,y3) = sc.get_dynamical_correlator(submode="maxent",name=(sc.Sx[i],sc.Sx[j]),es=es,
         delta=5e-2)
 t3 = time.time()

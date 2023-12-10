@@ -9,6 +9,7 @@ fc = fermionchain.Fermionic_Chain(n) # create the chain
 h = 0
 
 raise # this should be double checked
+#%dmrgpy: exclude_from_tests
 
 for i in range(n):
   for j in range(n):

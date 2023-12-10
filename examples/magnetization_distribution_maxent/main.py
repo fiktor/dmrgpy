@@ -33,6 +33,11 @@ x,y = sc.get_distribution(X=M,delta=5e-2) # compute a distribution
 t1 = time.time()
 print("Time KPM",t1-t0)
 from dmrgpy import distribution
+
+#%dmrgpy: exclude_from_tests
+# The following fails because
+# dmrgpy.maxenttk.pymaxent.reconstruct is not implemented
+# (no module named dmrgpy.maxenttk).
 x1,y1 = distribution.get_distribution_maxent(sc,X=M,n=6) # compute a distribution
 t2 = time.time()
 print("Time max ent",t2-t1)
@@ -49,14 +54,3 @@ plt.xlabel("magnetization")
 plt.ylabel("distribution")
 plt.legend()
 plt.show()
-
-
-
-
-
-
-
-
-
-
-

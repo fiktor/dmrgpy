@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# This does not perform any DMRG calculation, hence exclude from tests:
+#%dmrgpy: exclude_from_tests
 
 m = np.genfromtxt("D_VS_MU.OUT").transpose()
 x,y = m[0],m[1]

@@ -3,6 +3,7 @@ import os ; import sys ; sys.path.append(os.getcwd()+'/../../src')
 
 import numpy as np
 from dmrgpy import spinchain
+from dmrgpy import pychainwrapper
 n = 6
 # create a random spin chain
 spins = [np.random.randint(2,5) for i in range(n)] # spin 1/2 heisenberg chain
@@ -16,28 +17,21 @@ def fj(i,j):
   else: return 0.0
 sc.set_exchange(fj)
 
-#sc.kpmmaxm = 20 # KPM maxm
 import time
 i = np.random.randint(n)
 j = np.random.randint(n)
 t1 = time.time()
-(x2,y2) = sc.get_dynamical_correlator(mode="ED",
-        i=i,j=j,name="ZZ")
+(x2,y2) = sc.get_dynamical_correlator(
+    mode="ED", name=[sc.Sz[i], sc.Sz[j]])
 t2 = time.time()
 print("Time with T=0",t2-t1)
 
 
-(x3,y3) = sc.get_dynamical_correlator(mode="ED",T=0.0005,
-        i=i,j=j,name="ZZ")
+(x3,y3) = pychainwrapper.get_dynamical_correlator(
+    sc, T=0.0005, i=i, j=j, name="ZZ")
+
 t3 = time.time()
 print("Time with finite T",t3-t2)
-
-
-#(x4,y4) = sc.get_dynamical_correlator(mode="ED",submode="KPM",
-#        i=i,j=j,name="ZZ")
-#t4 = time.time()
-#print("Time with KPM-ED",t4-t3)
-
 
 # plot the results
 import matplotlib.pyplot as plt
@@ -53,15 +47,4 @@ plt.xlabel("frequency [J]")
 plt.ylabel("Dynamical correlator")
 plt.xlim([-0.5,4.5])
 plt.show()
-
-
-
-
-
-
-
-
-
-
-
 

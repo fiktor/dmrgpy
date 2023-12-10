@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from dmrgpy import bosonchain
 from dmrgpy import multioperator
 n = 3
-bc = bosonchain.Bosonic_Hamiltonian(n) # create the chain
+bc = bosonchain.Bosonic_Chain(n) # create the chain
 
 h = 0 # initialize
 for i in range(n-1): # hopping

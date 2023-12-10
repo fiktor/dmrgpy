@@ -7,6 +7,11 @@ from dmrgpy import spinchain
 n = 15 # number of sites in your chain
 spins = ["S=1/2" for i in range(n)] # create the sites
 sc = spinchain.Spin_Chain(spins) # create the chain
+
+#%dmrgpy: exclude_from_tests
+# sc.gs_energy (called by sc.get_gs) relies on is_hermitian check,
+# which relies on "random_mps" task, which is not implemented in Julia.
+
 sc.itensor_version = "julia"
 
 

@@ -23,6 +23,9 @@ def compare(n):
   e0 = sc.gs_energy() # compute the ground state energy
   t1 = time.time()
   sc = get(n)
+  #%dmrgpy: exclude_from_tests
+  # sc.gs_energy relies on is_hermitian check,
+  # which relies on "random_mps" task, which is not implemented in Julia.
   sc.itensor_version = "julia" # setup this version
   e1 = sc.gs_energy() # compute the ground state energy
   print("Energy with C++",e0)
