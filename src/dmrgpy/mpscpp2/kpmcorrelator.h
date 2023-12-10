@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 // compute the KPM moments for matrix m and vectors vi and vj
 // and a shift in the energy
 static auto moments_vi_vj_shift=[](auto m, auto vi, auto vj, int n, auto shift) {

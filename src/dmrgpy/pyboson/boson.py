@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # library to solve zn models using ED
 import numpy as np
 from ..edtk.one2many import one2many

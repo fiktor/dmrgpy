@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 // function to get a gap
 
 static auto get_gap = [](auto H, auto sites, auto sweeps) {

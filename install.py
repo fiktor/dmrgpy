@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+        
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 # create the optional arguments
 import argparse

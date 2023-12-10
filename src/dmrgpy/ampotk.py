@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # routines to use autompo features
 import numpy as np
 from . import multioperator

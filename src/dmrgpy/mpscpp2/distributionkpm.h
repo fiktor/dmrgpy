@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 // compute the moments of a distribution using the KPM
 
 static auto get_moments_distribution=[]()

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 // compute the KPM moments for matrix m and vectors vi and vj
 // orthogonalize them and compute the overlap over the matrix
 static auto moments_kpm_ortho=[](auto m, auto wf0, auto A, auto B, int n) {

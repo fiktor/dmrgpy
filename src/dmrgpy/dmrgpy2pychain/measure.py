@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 from .. import pychainwrapper
 import numpy as np
 from ..algebra import algebra

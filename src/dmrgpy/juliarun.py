@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # routines to run the code with Julia
 import os
 import subprocess

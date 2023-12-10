@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 from .algebra.kpm import generate_profile
 import numpy as np
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 function get_input_string(name::String,default::String="")
   out = ""
   open("tasks.in") do file

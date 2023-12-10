@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 def dmrg_BooB(indict,integrate_right=True):
     """Perform a single DMRG step"""

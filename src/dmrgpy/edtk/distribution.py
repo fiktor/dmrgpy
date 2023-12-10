@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 import scipy.sparse.linalg as slg
 from ..algebra import kpm
 from ..algebra import algebra

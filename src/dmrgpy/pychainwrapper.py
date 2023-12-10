@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 import numpy as np
 from .kpmdmrg import restrict_interval
 from .algebra import algebra

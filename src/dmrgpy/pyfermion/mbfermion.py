@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 from . import states
 from ..pychain.spectrum import ground_state
 import numpy as np

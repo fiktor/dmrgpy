@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # routines for exact diagonalization at finite temperature
 from ..algebra import algebra
 import numpy as np

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # routines to perform mean field calculations
 import numpy as np
 

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 // adapted from itensor.org
 
 static auto get_entropy=[]() {

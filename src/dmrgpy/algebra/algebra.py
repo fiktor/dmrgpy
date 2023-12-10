@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 from scipy.sparse import issparse
 from scipy.sparse import csc_matrix as csc
 import scipy.linalg as dlg

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # routines to call a function in parallel
 from __future__ import print_function
 import scipy.linalg as lg

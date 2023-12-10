@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 from .. import pychainwrapper
 from .. import operatornames
 from ..pychain import correlator as pychaincorrelator

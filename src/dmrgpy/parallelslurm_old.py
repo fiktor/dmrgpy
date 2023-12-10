@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # this is a special library to launch parallel calculations using slurm
 
 import dill as pickle

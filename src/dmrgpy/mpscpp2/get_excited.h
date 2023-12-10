@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 float get_energy_fluctuation(auto psi1, auto H) {
     normalize(psi1); // normalize the wavefunction

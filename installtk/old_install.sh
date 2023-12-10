@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # compile Itensor library
 cd src/dmrgpy/mpscpp/ITensor-master
 cp options.save options.mk

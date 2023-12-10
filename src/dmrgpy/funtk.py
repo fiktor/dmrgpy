@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # toolkit to deal with functions and matrices
 
 import numpy as np

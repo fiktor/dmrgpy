@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 from __future__ import print_function,division
 from .tensorial import tensorial_LO
 import numpy as np

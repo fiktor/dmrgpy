@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 static auto applyoperator=[]() {
   auto sites = get_sites();
   // now get the operators

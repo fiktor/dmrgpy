@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 
 auto minimum_energy=[](auto sites, auto H) {

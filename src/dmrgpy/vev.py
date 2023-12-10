@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # compute vacuum expectation values using multioperators
 
 from . import multioperator
