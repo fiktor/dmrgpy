@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+#ifndef __MPSCPP2_CHECK_TASK_H
+#define __MPSCPP2_CHECK_TASK_H
 // check if this task should be performed
 
 static auto check_task = [](auto name) {
@@ -32,5 +34,4 @@ static auto get_bool = [](auto name) {
   auto dotask = input.getYesNo(name, false);
   return dotask;
 };
-
-// functions to get data from the input file
+#endif // __MPSCPP2_CHECK_TASK_H

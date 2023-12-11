@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Add the root path of the dmrgpy library
 import os ; import sys ; sys.path.append(os.getcwd()+'/../../src')
 
@@ -22,14 +23,4 @@ cs = [sc.vev(p) for p in pairs] # compute the correlator between these sites
 import matplotlib.pyplot as plt
 plt.plot(range(len(cs)),cs,marker="o") # correlator using DMRG
 plt.show()
-
-
-
-
-
-
-
-
-
-
 

@@ -1,59 +1,57 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
 // adapted from itensor.org
+#ifndef __MPSCPP2_GET_ENTROPY_H
+#define __MPSCPP2_GET_ENTROPY_H
 
-static auto get_entropy=[]() {
-  //Given an MPS or IQMPS called "psi",
-  //and some particular bond "b" (1 <= b < psi.N())
-  //across which we want to compute the von Neumann entanglement
-  auto psi = read_wf("wavefunction.mps"); 
-  auto b = get_int_value("bond_entropy") ; // bond to compute
+#include "read_wf.h"
+
+static auto get_entropy = []() {
+  // Given an MPS or IQMPS called "psi",
+  // and some particular bond "b" (1 <= b < psi.N())
+  // across which we want to compute the von Neumann entanglement
+  auto psi = read_wf("wavefunction.mps");
+  auto b = get_int_value("bond_entropy"); // bond to compute
   //"Gauge" the MPS to site b
-  psi.position(b); 
-  
-  //Here assuming an MPS of ITensors, but same code works
-  //for IQMPS by replacing ITensor -> IQTensor
-  
-  //Compute two-site wavefunction for sites (b,b+1)
-  ITensor wf = psi.A(b)*psi.A(b+1);
-  
-  //SVD this wavefunction to get the spectrum
-  //of density-matrix eigenvalues
+  psi.position(b);
+
+  // Here assuming an MPS of ITensors, but same code works
+  // for IQMPS by replacing ITensor -> IQTensor
+
+  // Compute two-site wavefunction for sites (b,b+1)
+  ITensor wf = psi.A(b) * psi.A(b + 1);
+
+  // SVD this wavefunction to get the spectrum
+  // of density-matrix eigenvalues
   auto U = psi.A(b);
-  ITensor S,V;
-  auto spectrum = svd(wf,U,S,V);
-  
-  //Apply von Neumann formula
-  //spectrum.eigs() is a Vector containing
-  //the density matrix eigenvalues
+  ITensor S, V;
+  auto spectrum = svd(wf, U, S, V);
+
+  // Apply von Neumann formula
+  // spectrum.eigs() is a Vector containing
+  // the density matrix eigenvalues
   //(squares of the singular values)
   Real SvN = 0.;
-  for(auto p : spectrum.eigs())
-      {
-      if(p > 1E-12) SvN += -p*log(p);
-      } ;
-  ofstream myfile; // create object
-  myfile.open("ENTROPY.OUT"); // open file
+  for (auto p : spectrum.eigs()) {
+    if (p > 1E-12)
+      SvN += -p * log(p);
+  };
+  ofstream myfile;                                // create object
+  myfile.open("ENTROPY.OUT");                     // open file
   myfile << std::setprecision(16) << SvN << endl; // write file
-  return 0 ;
-}
-;
+  return 0;
+};
 
-static auto entropy=[](auto psi, int b) {
-  psi.position(b); 
-  ITensor wf = psi.A(b)*psi.A(b+1);
+static auto entropy = [](auto psi, int b) {
+  psi.position(b);
+  ITensor wf = psi.A(b) * psi.A(b + 1);
   auto U = psi.A(b);
-  ITensor S,V;
-  auto spectrum = svd(wf,U,S,V);
+  ITensor S, V;
+  auto spectrum = svd(wf, U, S, V);
   Real SvN = 0.;
-  for(auto p : spectrum.eigs())
-      {
-      if(p > 1E-12) SvN += -p*log(p);
-      } ;
-  return SvN ;
-}
-;
+  for (auto p : spectrum.eigs()) {
+    if (p > 1E-12)
+      SvN += -p * log(p);
+  };
+  return SvN;
+};
 
-
-
-
-
+#endif // __MPSCPP2_GET_ENTROPY_H
