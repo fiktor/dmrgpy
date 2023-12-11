@@ -12,11 +12,6 @@ def get_moments_dmrg(self,n=1000):
   self.run() # perform the calculation
   return self.execute(lambda: np.genfromtxt("KPM_MOMENTS.OUT").transpose()[0])
 
-
-
-
-
-
 def get_moments_dynamical_correlator_dmrg(self,name=None,delta=1e-1):
   """Get the moments with DMRG"""
   # do some sanity checks
@@ -55,14 +50,8 @@ def get_moments_dynamical_correlator_dmrg(self,name=None,delta=1e-1):
               extrapolation_mode=self.kpm_extrapolate_mode)
   else: return mus
 
-
-
-
-
-
 from . import pychain
 from .algebra.kpm import generate_profile
-
 
 def restrict_interval(x,y,window):
   """Restrict the result to a certain energy window"""
@@ -74,12 +63,6 @@ def restrict_interval(x,y,window):
   if len(j)==0: j = len(x)
   else: j = j[0][0]
   return x[i:j].real,y[i:j]
-
-
-
-
-
-
 
 def get_dynamical_correlator(self,n=1000,
              name=None,delta=1e-1,kernel="jackson",

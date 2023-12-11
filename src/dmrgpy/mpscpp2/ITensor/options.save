@@ -58,7 +58,8 @@ CCCOM=g++ -m64 -std=c++14 -fPIC #-fconcepts-ts
 ##
 
 PLATFORM=lapack
-BLAS_LAPACK_LIBFLAGS=-lpthread -L/usr/lib -lblas -llapack 
+LD_LIBRARY_PATH_FLAGS=$(shell echo $$LD_LIBRARY_PATH | sed 's/:/ -L/g' | sed 's/^/-L/g')
+BLAS_LAPACK_LIBFLAGS=-lpthread $(LD_LIBRARY_PATH_FLAGS) -lblas -llapack
 
 ##
 ## Example using the Intel MKL library

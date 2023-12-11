@@ -81,7 +81,7 @@ def dynamical_correlator_analytic_continuation(self,name=None,
 #    xz = [np.random.random()-.5+1j*np.random.random()+0.5j for i in range(40)]
 #    xz = 40.*np.array(xz)
     outz = np.array([f(z) for z in xz]) # complex axis
-    esz,out = imag2real(xz,outz,x=es+1j*delta)
+    esz,out = imag2real(xz,outz,xs=es+1j*delta)
     out = -out.imag*2/np.pi
     return es,out
 

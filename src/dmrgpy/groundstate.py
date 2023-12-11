@@ -35,7 +35,7 @@ def gs_energy_many(self,n=20,**kwargs):
         self.skip_dmrg_gs = False
         e0 = gs_energy_single(self,reconverge=False,
                 **kwargs) # ground state energy
-        if e0<emin: 
+        if e0<emin:
             wf0 = self.wf0.copy() # copy wavefunction
             emin = e0
         else: self.wf0.clean() # remove wavefunction
@@ -45,15 +45,18 @@ def gs_energy_many(self,n=20,**kwargs):
     print("Final energy",self.vev(self.hamiltonian).real)
     return emin
 
-def gs_energy_single(self,wf0=None,reconverge=None,maxde=None,maxdepth=5):
+def gs_energy_single(self, wf0=None, reconverge=None, maxde=None, maxdepth=5):
     """
     Return the ground state energy
     """
-    if wf0 is not None: 
+    if wf0 is not None:
         self.execute(wf0.write) # write wavefunction
-        self.set_initial_wf(wf0,reconverge=True) # set the initial wavefunction
-    if reconverge is not None: # overwrite skip_dmrg_gs
+        self.set_initial_wf(wf0, reconverge=True) # set the initial wavefunction
+
+    if reconverge is not None:
+        # overwrite skip_dmrg_gs:
         self.skip_dmrg_gs = not reconverge # if the computation should be rerun
+
     self.execute(lambda: self.setup_task("GS"))
     self.write_hamiltonian() # write the Hamiltonian to a file
     self.run() # perform the calculation
@@ -64,17 +67,17 @@ def gs_energy_single(self,wf0=None,reconverge=None,maxde=None,maxdepth=5):
     self.sites_from_file = True
     self.gs_from_file = True
     self.skip_dmrg_gs = True
-    wf0 = mps.MPS(MBO=self,name="psi_GS.mps").copy() # set GS
+    wf0 = mps.MPS(MBO=self, name="psi_GS.mps").copy() # set GS
     self.set_initial_wf(wf0) # set the initial wavefunction
     if maxde is not None: # enforce a maximum fluctuation in the energy
-      e = self.vev(self.hamiltonian)  
-      e2 = self.vev(self.hamiltonian,npow=2) 
+      e = self.vev(self.hamiltonian)
+      e2 = self.vev(self.hamiltonian,npow=2)
       de = np.sqrt(abs(e2-e**2)) # fluctuation in the energy
       de = de/self.ns # normalize by the number of sites
-      if de>maxde and maxdepth>0: # if a maximum energy fluctuation 
+      if de>maxde and maxdepth>0: # if a maximum energy fluctuation
           maxm,nsweeps = self.maxm,self.nsweeps
           noise = self.noise
-          print("Energy fluctuation = ",de,maxm)
+          print("Energy fluctuation = ", de, maxm)
           self.maxm = maxm*2
           self.nsweeps = 2 # just two sweeps
           self.noise = 0.0
@@ -86,15 +89,16 @@ def gs_energy_single(self,wf0=None,reconverge=None,maxde=None,maxdepth=5):
     self.computed_gs = True # ground state has been computed
     return out # return energy
 
-def gs_energy(self,policy="single",**kwargs):
+def gs_energy(self, policy="single", **kwargs):
     if self.is_hermitian(self.hamiltonian): # put a check for Hermitian
-        if policy=="single":
-            return gs_energy_single(self,**kwargs)
-        if policy=="many":
-            return gs_energy_many(self,**kwargs)
-        else: raise
+        if policy == "single":
+            return gs_energy_single(self, **kwargs)
+        if policy == "many":
+            return gs_energy_many(self, **kwargs)
+        else:
+            raise ValueError("Unknown policy " + policy)
     else:
-        es,ws = self.get_excited_states(n=1,**kwargs)
+        es, ws = self.get_excited_states(n=1, **kwargs)
         self.computed_gs = True
         self.e0 = es[0]
         self.wf0 = ws[0].copy() # copy wavefunction

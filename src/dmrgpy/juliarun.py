@@ -2,38 +2,43 @@
 # routines to run the code with Julia
 import os
 import subprocess
+import sys
+import functools
 
-dmrgpath = os.path.dirname(os.path.realpath(__file__))
+DMRG_PATH = os.path.dirname(os.path.realpath(__file__))
 
+START_JULIA = f"""
+import Dates;
+println(
+    "Starting 'instantiate' @ ",
+    Dates.format(Dates.now(), "yyyy-mm-dd HH:MM:SS"));
+flush(stdout);
+juliamps_dir = joinpath("{DMRG_PATH}", "julia", "MatrixProductStates");
+import Pkg;
+Pkg.activate(juliamps_dir);
+Pkg.instantiate();
+import MatrixProductStates;
+"""
 
+@functools.cache
+def get_jlsession():
+    class JuliaCallSession:
+        def __init__(self):
+            import juliacall
+            jl = self.jlsession = juliacall.newmodule("dmrgpy")
+            julia_dir = os.path.join(DMRG_PATH, "julia", "MatrixProductStates")
+            for line in START_JULIA.split(";\n"):
+                jl.seval(line)
+        def main(self):
+            return self.jlsession.MatrixProductStates.main()
 
+    # The following may raise an exception.
+    # We do not catch it, because we do not have other ways to run Julia.
+    return JuliaCallSession()
 
-# check the system image
-sysimage = os.environ["HOME"]+"/.julia/sysimages/sys_itensors.so"
-if not os.path.isfile(sysimage):
-    print("No ITensors system image found, this may take some time")
-    sysimage = None
-
-try: # create the executable
-    from julia.api import Julia
-    jlsession = Julia(compiled_modules=False,
-            sysimage=sysimage) # start the Julia session
-    jlsession.eval("using Suppressor") # suppress output
-except:
-    print("Julia cannot be executed, you probably need to install the Julia version")
-    class JLdummy(): 
-        def eval(self,c):
-            print("Julia cannot be executed, you probably need to install the Julia version")
-            exit()
-    jlsession = JLdummy()
-
-
-def run(self):
-    """Execute the Julia program"""
-    import contextlib
-    c = "@suppress_out include(\""+dmrgpath+"/mpsjulia/mpsjulia.jl\");"
-    self.execute(lambda: jlsession.eval(c)) # evaluate Julia
-
+def run(obj):
+    """Execute mpsjulia.jl"""
+    obj.execute(get_jlsession().main)
 
 
 def install():
@@ -48,5 +53,5 @@ def install():
 def precompile():
     """Precompile Julia"""
     julia = "julia" # julia command
-    os.system(julia+" --eval  \"using ITensors; ITensors.compile()\"") 
+    os.system(julia+" --eval  \"using ITensors; ITensors.compile()\"")
 

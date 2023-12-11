@@ -25,7 +25,8 @@ def get_dynamical_correlator(self,submode="KPM",**kwargs):
     elif submode=="maxent": # Max ent mode
         from .distribution import dynamical_correlator_positive_defined
         return dynamical_correlator_positive_defined(self,**kwargs)
-    else: raise
+    else:
+        raise ValueError(f"Unknown submode '{submode}'")
 
 
 

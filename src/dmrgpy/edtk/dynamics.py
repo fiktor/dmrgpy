@@ -13,12 +13,14 @@ def get_dynamical_correlator(self,name=None,submode="KPM",**kwargs):
     """
     Compute the dynamical correlator
     """
-    if name is None: raise
+    assert name is not None
     if type(name[0])==multioperator.MultiOperator and type(name[1])==multioperator.MultiOperator: # multioperator
       A = self.get_operator(name[0])
       B = self.get_operator(name[1])
     else:
-      raise # this is no longer used
+      raise ValueError(
+          f"Expected 2 MultiOperator's in `name` argument, got {name} "
+          + f"(types {type(name[0])} and {type(name[1])})")
     wf0 = self.get_gs_array() # compute ground state
     h = self.get_operator(self.hamiltonian) # Hamiltonian in matrix form
     if not is_hermitian(h): # non Hermitian Hamiltonians

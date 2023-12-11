@@ -303,9 +303,9 @@ class Spinon_Chain(Spinful_Fermionic_Chain):
         from .mpsalgebra import mpsarnoldi
         super().gs_energy(**kwargs) # get the GS
         wf = self.wf0
-#        wf = None # no initial guess
-#        print("Projection",wf.dot(P*wf).real)
-        wf = mpsarnoldi(self,self.hamiltonian,mode="GS",P=P,wf=wf)
+        es, wfs = mpsarnoldi(self,self.hamiltonian,mode="GS",P=P,wf=wf)
+        wf = wfs[0] # get the ground state
+
         print("Projection",wf.dot(P*wf).real)
         self.computed_gs = True # computed GS
         self.wf0 = wf # store ground state

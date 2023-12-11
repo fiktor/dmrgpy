@@ -36,7 +36,7 @@ def write_status(i,indict,outf):
   # entropy
   outf["entropy"].write(str(i)+"   "+str(indict["entropy"])+"\n")
   # time
-  outf["times"].write(str(i)+"   "+str(time.clock())+"\n")
+  outf["times"].write(str(i)+"   "+str(time.time())+"\n")
   # correlation
   outf["correlation"].write(str(i)+"   "+str(indict["correlator"])+"\n")
   # length

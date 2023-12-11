@@ -2,6 +2,9 @@
 from __future__ import print_function
 import numpy as np
 import os
+import pathlib
+import shutil
+
 from . import mps
 from . import timedependent
 from . import groundstate
@@ -20,19 +23,13 @@ from . import effectivehamiltonian
 from .writemps import write_sites
 from .mode import dmrgpath
 
-
 one = np.matrix(np.identity(3))
-
-
 
 class Coupling():
   def __init__(self,i,j,g):
     self.i = i
     self.j = j
     self.g = g
-
-
-
 
 class Many_Body_Chain():
   def __init__(self,sites):
@@ -85,9 +82,9 @@ class Many_Body_Chain():
       self.kpm_extrapolate = False # use extrapolation
       self.kpm_extrapolate_factor = 2.0 # factor for the extrapolation
       self.kpm_extrapolate_mode = "plain" # mode of the extrapolation
-      os.system("mkdir -p "+self.path) # create folder for the calculations
-      self.initialize()
-      # and initialize the sites
+      pathlib.Path(self.path).mkdir(exist_ok=True)
+      self.initialize() # and initialize the sites
+
   def initialize(self):
       self.sites_from_file = False
       self.task = {"write_sites":"true"}
@@ -95,105 +92,137 @@ class Many_Body_Chain():
       self.run() # run the calculation
       from .mode import get_mode
       if not get_mode(self)=="ED":
-          self.bin_sites = open(self.path+"/sites.sites","rb").read() 
+          self.bin_sites = open(self.path + "/sites.sites", "rb").read()
       self.sites_from_file = True
+
   def setup_julia(self):
       """Setup the Julia mode"""
       self.itensor_version = "julia"
       self.initialize()
+
   def setup_cpp(self):
-      """Setup the Julia mode"""
+      """Setup the CPP mode"""
       self.itensor_version = "2"
       self.initialize()
+
   def get_mode(self,**kwargs):
       from .mode import get_mode
       return get_mode(self,**kwargs)
+
   def to_folder(self):
       """Go to a certain folder"""
-#      self.inipath = os.getcwd() # record the folder
-      os.chdir(self.path) # go to calculation folder
+      os.chdir(self.path)
+
   def copy(self):
       return self.clone() # clone and create a new one
       from copy import deepcopy
       return deepcopy(self)
+
   def clone(self):
       """
-      Clone the object and create a temporal folder
+      Clone the object and create a temporary folder
       """
       from copy import deepcopy
-      name = "dmrgpy_clone_"+str(np.random.randint(10000))
-      os.system("rm -rf /tmp/"+name) # clean the new directory
-      out = deepcopy(self) # full copy of the object 
-      out.path = "/tmp/"+name # new path
+      name = "dmrgpy_clone_" + str(np.random.randint(10000))
+      new_path = os.path.join("/tmp", name)
+      if os.path.exists(new_path) and os.path.isdir(new_path):
+          shutil.rmtree(new_path)
+      out = deepcopy(self) # full copy of the object
+      out.path = new_path # new path
       out.inipath = os.getcwd() # initial path
-#      print("New path",out.path)
-      os.system("cp -r "+self.path+"  "+out.path) # copy to the new path
-      return out # return new object
-  def set_hamiltonian(self,MO,restart=True): 
+      shutil.copytree(self.path, new_path)
+      return out
+
+  def set_hamiltonian(self, MO, restart=True):
       """Set the Hamiltonian"""
-      if restart: self.restart() # restar the calculation
+      if restart:
+          self.restart()
       self.hamiltonian = MO
-      self.use_ampo_hamiltonian = True # use ampo Hamiltonian
+      self.use_ampo_hamiltonian = True
+
   def get_heff(self,**kwargs):
       """Return effective Hamiltonian"""
       return effectivehamiltonian.get_effective_hamiltonian_coefficients(self,
               **kwargs)
-  def bandwidth(self,h,**kwargs):
+
+  def bandwidth(self, h, **kwargs):
       """Compute the bandwidth of an Hermitian operator"""
       mbc = self.clone() # clone the object
-      mbc.set_hamiltonian(h) ; e0 = mbc.gs_energy(**kwargs)
-      mbc.set_hamiltonian(-h) ; e1 = mbc.gs_energy(**kwargs)
+      mbc.set_hamiltonian(h)
+      e_min = mbc.gs_energy(**kwargs)
+      mbc.set_hamiltonian(-h)
+      e_max = -mbc.gs_energy(**kwargs)
       mbc.clean() # remove
-      return -e0 -e1
-  def lowest_eigenvalue(self,X,**kwargs):
+      return e_max - e_min
+
+  def lowest_eigenvalue(self, X, **kwargs):
       """Given an operator X, return its smallest eigenvalue"""
       mbc = self.clone() # clone the object
-      mbc.set_hamiltonian(X) 
+      mbc.set_hamiltonian(X)
       return mbc.gs_energy(**kwargs)
-  def to_origin(self): 
-      if os.path.isfile(self.path+"/ERROR"): raise # something wrong
+
+  def to_origin(self):
+      if os.path.isfile(self.path+"/ERROR"):
+          raise RuntimeError(
+              f"Error in the calculation: '{self.path}/ERROR'")
       os.chdir(self.inipath) # go to original folder
+
   def restart(self):
       """Restart the calculation"""
       self.computed_gs = False
       self.gs_from_file = False
       self.skip_dmrg_gs = False
       self.wf0 = None # initial file for GS
+
   def is_hermitian(self,H):
       """Check if an operator is Hermitian"""
       from .mpsalgebra import is_hermitian
       return is_hermitian(self,H)
-  def clean(self): 
+
+  def clean(self):
       """
-      Remove the temporal folder
+      Remove the temporary folder
       """
-      os.system("rm -rf "+self.path) # clean temporal folder
+      if os.path.exists(self.path) and os.path.isdir(self.path):
+          shutil.rmtree(self.path)
+
   def vev_MB(self,MO,**kwargs):
       """
       Compute a vacuum expectation value
       """
       return vev.vev(self,MO,**kwargs)
+
   def get_gs_degeneracy(self,**kwargs):
       from . import degeneracy
       return degeneracy.gs_degeneracy(self,**kwargs)
-  def vev(self,MO,mode="DMRG",**kwargs): 
-      mode = self.get_mode(mode=mode) # overwrite mode
-      if mode=="DMRG": return vev.vev(self,MO,**kwargs)
-      elif mode=="ED": return self.get_ED_obj().vev(MO,**kwargs) # ED object
-      else: raise
+
+  def vev(self, MO, mode="DMRG", **kwargs):
+      mode = self.get_mode(mode=mode)
+      if mode=="DMRG":
+          return vev.vev(self,MO,**kwargs)
+      elif mode=="ED":
+          return self.get_ED_obj().vev(MO,**kwargs) # ED object
+      else:
+          raise
+
   def test_ED(self):
       """Test the ED object"""
       self.get_ED_obj().test()
+
   def toMPO(self,H,**kwargs):
       """Transport an operator into a matrix-product operator"""
       return mpsalgebra.toMPO(self,H,**kwargs)
+
   def excited_vev_MB(self,MO,**kwargs):
       """
       Compute a vacuum expectation value
       """
       return vev.excited_vev(self,MO,**kwargs)
-  def excited_vev(self,MO,**kwargs): return self.excited_vev_MB(MO,**kwargs)
-  def set_vijkl(self,f):
+
+  def excited_vev(self, MO, **kwargs):
+      return self.excited_vev_MB(MO,**kwargs)
+
+  def set_vijkl(self, f):
       """
       Create the generalized interaction
       """
@@ -279,9 +308,17 @@ class Many_Body_Chain():
       from .writemps import write_sites
       self.execute(lambda: write_sites(self)) # write the different sites
       self.execute(lambda: self.hamiltonian.write("hamiltonian.in"))
-  def run(self,**kwargs): 
+
+  def run(self,**kwargs):
       from .mode import run
-      return run(self,**kwargs)
+      return run(self, **kwargs)
+
+  def get_entropy(self, wf, b):
+      assert isinstance(b, int)
+      if wf is None:
+          wf = self.get_wf()
+      return entropy.compute_entropy(self, psi=wf, b=b)
+
   def get_bond_entropy(self,wf,i,j):
       """Return the entanglement entropy of two sites"""
       return entropy.bond_entropy(self,wf,i,j)
@@ -309,17 +346,15 @@ class Many_Body_Chain():
       return dynamics.get_dynamical_correlator(self,**kwargs)
   def get_dynamical_correlator(self,mode="DMRG",**kwargs):
       mode = self.get_mode(mode=mode) # overwrite mode
-      if mode=="DMRG": 
+      if mode=="DMRG":
           return dynamics.get_dynamical_correlator(self,**kwargs)
-      elif mode=="ED": 
+      elif mode=="ED":
           return self.get_ED_obj().get_dynamical_correlator(**kwargs)
   def get_distribution(self,mode="DMRG",**kwargs):
-      if mode=="DMRG": 
+      if mode=="DMRG":
           from . import distribution
           return distribution.get_distribution(self,**kwargs)
-     #     raise # not implemented
-       #   return dynamics.get_dynamical_correlator(self,**kwargs)
-      elif mode=="ED": 
+      elif mode=="ED":
           return self.get_ED_obj().get_distribution(**kwargs)
       else: raise
   def get_distribution_moments(self,mode="DMRG",**kwargs):
@@ -380,30 +415,35 @@ class Many_Body_Chain():
         else: self.gs_energy(**kwargs) # perform a ground state calculation
         return self.wf0 # return wavefunction
       elif mode=="ED": return self.get_ED_obj().get_gs(**kwargs)
+
   def get_gs_manifold(self,**kwargs):
       return groundstate.get_gs_manifold(self,**kwargs)
-  def gs_energy(self,mode="DMRG",**kwargs):
+
+  def gs_energy(self, mode="DMRG", **kwargs):
       """Return the ground state energy"""
-      mode = self.get_mode(mode=mode) # overwrite mode
-      if mode=="DMRG": 
-          if self.computed_gs: return self.e0
-          return groundstate.gs_energy(self,**kwargs)
-      elif mode=="ED": return self.get_ED_obj().gs_energy() # ED object
-      else: raise
-#  def get_correlator_MB(self,**kwargs):
-#      """Return a correlator"""
-#      return correlator.get_correlator(self,**kwargs)
+      mode = self.get_mode(mode=mode)
+      if mode=="DMRG":
+          if self.computed_gs:
+              return self.e0
+          return groundstate.gs_energy(self, **kwargs)
+      elif mode=="ED":
+          return self.get_ED_obj().gs_energy()
+      else:
+          raise ValueError("Unknown mode: {}".format(mode))
+
   def get_correlator(self,pairs=[],**kwargs):
       """Return a correlator, default one"""
       print("Method get_correlator is deprecated, use vev instead")
       from . import spinchain
       from . import fermionchain
-      if type(self)==spinchain.Spin_Chain: 
-          ops = [self.Sz[i]*self.Sz[j] for (i,j) in pairs]
-      elif type(self)==fermionchain.Fermionic_Chain: 
-          ops = [self.Cdag[i]*self.C[j] for (i,j) in pairs]
-      else: raise
-      return np.array([self.vev(o,**kwargs) for o in ops])
+      if type(self) == spinchain.Spin_Chain:
+          ops = [self.Sz[i] * self.Sz[j] for (i,j) in pairs]
+      elif type(self) == fermionchain.Fermionic_Chain:
+          ops = [self.Cdag[i] * self.C[j] for (i,j) in pairs]
+      else:
+          raise ValueError("Unknown type of chain: {}".format(type(self)))
+      return np.array([self.vev(o, **kwargs) for o in ops])
+
   def get_file(self,name):
       """Return the electronic density"""
       if not self.computed_gs: self.get_gs() # compute gs
@@ -411,18 +451,21 @@ class Many_Body_Chain():
       m = np.genfromtxt(name) # read file
       self.to_origin() # go back
       return m
-  def execute(self,f):
+
+  def execute(self, f):
       """Execute function in the folder"""
       self.to_folder() # go to folder
       out = f()
       self.to_origin() # go back
       return out # return result
+
   def evolution(self,**kwargs):
       """
       Perform time dependent DMRG
       """
       from . import timedependent
       return timedependent.evolution(self,**kwargs)
+
   def get_rdm(self,**kwargs):
       """
       Compute the reduced density matrix
@@ -433,26 +476,24 @@ class Many_Body_Chain():
       Return an estimate of the bandwidth
       """
       return 3*self.ns # estimated bandwidth
-  def random_mps(self,mode="DMRG",orthogonal=None):
+
+  def random_mps(self, mode="DMRG", orthogonal=None):
       """Generate a random MPS"""
-      if self.mode is not None: mode = self.mode # redefine
+      if self.mode is not None:
+          mode = self.mode # redefine
       if mode=="DMRG":
-         from . import mps
-         if orthogonal is None:  return mps.random_mps(self)
-         else: return mps.orthogonal_random_mps(self,orthogonal)
-      elif mode=="ED":
+          from . import mps
+          if orthogonal is None:
+             return mps.random_mps(self)
+          return mps.orthogonal_random_mps(self,orthogonal)
+      if mode=="ED":
           return self.get_ED_obj().random_state()
+      raise ValueError(f"Unknown mode: {mode}")
+
   def get_operator(self,name,i=None):
       """Return a certain multioperator"""
       from . import multioperator
       return multioperator.obj2MO([[name,i]]) # return operator
-
-
-
-#from fermionchain import Fermionic_Hamiltonian
-#from spinchain import Spin_Hamiltonian
-
-
 
 from .writemps import write_hoppings
 from .writemps import write_hubbard
@@ -460,36 +501,26 @@ from .writemps import write_fields
 from .writemps import write_exchange
 from .writemps import write_pairing
 
-
-
-
-
-
 def setup_sweep(self,mode="default"):
-  """Setup the sweep parameters"""
-  sweep = dict() # dictionary
-  sweep["cutoff"] = 1e-06
-  if mode=="default": # default mode
-    sweep["n"] = "20"
-    sweep["maxm"] = "100" 
-  elif mode=="fast": # default mode
-    sweep["n"] = "3"
-    sweep["maxm"] = "20" 
-  elif mode=="accurate": # default mode
-    sweep["n"] = "10"
-    sweep["maxm"] = "50" 
-  else: raise
-  sweep["n"] = self.nsweeps
-  sweep["maxm"] = self.maxm
-  sweep["cutoff"] = self.cutoff
-  self.sweep = sweep # initialize
-#  write_sweeps(self) # write the sweeps
-
-
-
+    """Setup the sweep parameters"""
+    sweep = {"cutoff": 1e-06}
+    if mode=="default":
+        sweep["n"] = "20"
+        sweep["maxm"] = "100"
+    elif mode=="fast":
+        sweep["n"] = "3"
+        sweep["maxm"] = "20"
+    elif mode=="accurate":
+        sweep["n"] = "10"
+        sweep["maxm"] = "50"
+    else:
+        raise ValueError(f"Unknown mode: {mode}")
+    sweep["n"] = self.nsweeps
+    sweep["maxm"] = self.maxm
+    sweep["cutoff"] = self.cutoff
+    self.sweep = sweep # initialize
 
 Many_Body_Hamiltonian = Many_Body_Chain # temporal workaround
-
 
 import string
 import random
@@ -497,7 +528,4 @@ import random
 def id_generator(size=20, chars=string.ascii_uppercase + string.digits):
    out = ''.join(random.choice(chars) for _ in range(size))
    return "/tmp/dmrgpy_tmp/"+out # temporal folder
-
-
-
 

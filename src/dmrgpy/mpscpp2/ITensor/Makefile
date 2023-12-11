@@ -5,14 +5,13 @@
 
 include options.mk
 
-build: itensor 
+build: itensor
 
 itensor: configure
 	@echo
 	@echo Building ITensor library
 	@echo
 	@cd itensor && $(MAKE)
-    
 
 configure:
 	@echo

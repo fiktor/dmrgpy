@@ -1,8 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 from __future__ import print_function
 from __future__ import division
-from . import tensorialf90 # fortran90 library
-from . import traceoverf90
 from . import spectrum
 from scipy.sparse import linalg as slg # linear algebra library
 from scipy import linalg as lg # linear algebra library
@@ -45,7 +43,6 @@ coupled_hamiltonian = dmrgtk.coupledhamiltonian
 def states_dmat(dmat,datadict):
   """Most important states in the density matrix"""
   nstates = datadict["number_of_states"] # states to retain
-  told = time.clock() # old time
   es,vecs = lg.eigh(-dmat) # call lapack
   es = -es # set in positive
   vecs = np.transpose(vecs) # transpose vectors

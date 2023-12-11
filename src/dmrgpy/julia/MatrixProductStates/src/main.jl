@@ -1,9 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-#include("common.jl")
-push!(LOAD_PATH, @__DIR__) # include this path
-using commonmpsjulia
-
-let
+import Dates
+function main()
 	if get_bool("GS") # ground state energy
 		get_gs()
 	end
@@ -34,4 +31,6 @@ let
 	if get_bool("exponential_eMwf") # apply an operator
 		exponential()
 	end
+  now_str = Dates.format(Dates.now(), "yyyy-mm-dd HH:MM:SS")
+  println("MatrixProductStates.main completed @ $(now_str).")
 end

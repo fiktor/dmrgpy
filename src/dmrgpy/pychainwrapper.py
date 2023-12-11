@@ -62,9 +62,9 @@ def get_dynamical_correlator(self,T=0.0,**kwargs):
     else: # finite temperature
         h = get_full_hamiltonian(self) # get the Hamiltonian
         sc = get_pychain(self) # get the object
-        n1,n2 = operatornames.recognize(name) # return the names
-        a = sc.get_operator(n1,i) # get operator
-        b = sc.get_operator(n2,j) # get operator
+        n1, n2 = operatornames.recognize(kwargs.pop("name"))
+        a = sc.get_operator(n1,kwargs.pop("i")) # get operator
+        b = sc.get_operator(n2,kwargs.pop("j")) # get operator
         return finitetemperature.dynamical_correlator(h,a,b,T=T,**kwargs)
 
 

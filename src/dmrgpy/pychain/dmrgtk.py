@@ -2,11 +2,9 @@
 from __future__ import print_function,division
 from .tensorial import tensorial_LO
 import numpy as np
-from . import traceoverf90
 from . import tensorial
 from scipy.sparse import csc_matrix,kron
 from scipy.sparse import coo_matrix
-from . import tensorialf90
 import time
 from scipy.sparse import linalg as slg # linear algebra library
 from scipy import linalg as lg # linear algebra library
@@ -53,11 +51,14 @@ def tensorialoperator(op1,op2,sparse=True,LO=False):
 
 
 def traceover(wf,n1,n2):
-  """For an input wavefunction, trace over the n2 space"""
-  if len(wf) != n1*n2: raise # check that is has the correct dimensions
-  dmat = traceoverf90.traceover(wf,n1,n2) # get the density matrix
-  return np.matrix(dmat) # return density matrix
+  """For an input wavefunction, trace over the n2 space.
 
+  Returns a matrix of size n1 x n1
+  """
+  assert wf.ndim == 1
+  assert wf.shape[0] == n1 * n2
+  wf = wf.reshape((n1, n2))
+  return np.matrix(wf @ wf.conj().T)
 
 
 def getentropy(es):
@@ -87,7 +88,7 @@ def groundstate(h,dim1,dim2,v0=None,target=0,diag_states=20,
     if h.shape[0] != v0.shape[0]:
       v0=None
       print("Wrong dimension of v0")
-  told = time.clock() # old time
+  told = time.time() # old time
   if not dmrg.silent: print("Dimension of the Hamiltonian",h.shape)
 #  if v0 is not None: diag_states = 2
   diag_states = dmrgp["diag_states"] # state to retain
@@ -101,7 +102,7 @@ def groundstate(h,dim1,dim2,v0=None,target=0,diag_states=20,
     (es,wfs) = slg.eigsh(h,k=diag_states,which="SA",
                   v0=None,tol=dmrgp["tol"]) # ground state
   wfs = np.transpose(wfs) # transpose
-  tnew = time.clock() # old time
+  tnew = time.time() # old time
   if not dmrg.silent: print("Time in ground state",tnew-told)
   if len(es)>1:
     eout = sorted(es)[target] # which eigenvalue to retain
@@ -128,7 +129,8 @@ def groundstate(h,dim1,dim2,v0=None,target=0,diag_states=20,
 #  ####################################
   # calculate the density matrices
   retain_states = min(retain_states,len(wfs)) # number of waves
-  dmats = [traceover(wfs[i],dim1,dim2) for i in range(retain_states)] # trace over right site + block
+  # trace over right site + block:
+  dmats = [traceover(wfs[i],dim1,dim2) for i in range(retain_states)]
   # compute the "distance" between excited and GS dmat
   if dmrgp["function_DM_distance"] is None: fDM = fDMdis # use default function
   else: fDM = dmrgp["function_DM_distance"] # use default function

@@ -14,7 +14,7 @@ def compile(gpp="g++",check_gpp=True):
       writemk(gpp=gpp) # write options.mk
       if check_gpp: # check the compiler
         print("Checking if the compilar is ok")
-        if cppversion.correct_version(gpp=gpp):
+        if cppversion.correct_version(gpp=gpp, verbose=True):
           print("C++ compiler "+gpp+" is ok and will be used")
         else: # C++ compiler is not the right one
           print("You may need to install the GNU C++ compiler")
@@ -51,8 +51,9 @@ def compile(gpp="g++",check_gpp=True):
 
 def writemk(gpp="g++"):
     """Write options.mk"""
-    path = os.path.dirname(os.path.realpath(__file__))+"/../" # main path
-    path = path+"/src/dmrgpy/mpscpp2/ITensor"
+    # main path:
+    path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    path = path + "/src/dmrgpy/mpscpp2/ITensor"
     out = open(path+"/options.save").read().replace("CCCOM=g++","CCCOM="+gpp)
     open(path+"/options.mk","w").write(out) # write file
 

@@ -114,8 +114,11 @@ class Spin_Chain(Many_Body_Chain):
         return np.array([mx,my,mz]).real
     def get_effective_hamiltonian(self,**kwargs):
         """Return the effective Hamiltonian"""
-        return effectivehamiltonian.get_effective_hamiltonian(self,
-                    name="XX",**kwargs)
+        # Note: in the original code, this was passing `name="XX"`,
+        # but there is no such argument in
+        # effectivehamiltonian.get_effective_hamiltonian.
+        return effectivehamiltonian.get_effective_hamiltonian(
+            self, **kwargs)
     def get_hamiltonian(self):
         """Return Hamiltonian as a multioperator"""
         if self.hamiltonian is not None: return self.hamiltonian

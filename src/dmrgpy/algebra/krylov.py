@@ -44,6 +44,7 @@ def gram_smith_single(w,ws):
     w = w.normalize()
     for wj in ws: # loop over stored wavefunctions
         w = w - wj.dot(w)*wj # remove the overlap with each WF
+        assert w is not None
     return w.normalize()
 
 
